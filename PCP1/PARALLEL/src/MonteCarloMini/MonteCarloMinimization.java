@@ -32,39 +32,21 @@ class MonteCarloMinimization {
         double ymax = Double.parseDouble(args[5] );
         double searches_density = Double.parseDouble(args[6] );
 
-        ForkJoinPool pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+        
         TerrainArea terrain = new TerrainArea(rows, columns, xmin, xmax, ymin, ymax);
         int num_searches = (int)( rows * columns * searches_density );
-        List<SearchTask> tasks = new ArrayList<>();
-        Random rand = new Random();
+        
+        
 
-        for (int i = 0; i < num_searches; i++) {
-            Search search = new Search(i+1, rand.nextInt(rows), rand.nextInt(columns), terrain);
-            SearchTask task = new SearchTask(search);
-            tasks.add(task);
-            pool.execute(task);
-        }
+        
 
-        pool.shutdown();
+       
 
         tick();
-        int min = Integer.MAX_VALUE;
-        int local_min;
-        int finder = -1;
-
-        for (SearchTask task : tasks) {
-            try {
-                local_min = task.get();
-                Search search = task.getSearch();
-                if (!search.isStopped() && local_min < min) {
-                    min = local_min;
-                    finder = search.getID() - 1;
-                }
-                if(DEBUG) System.out.println("Search "+search.getID()+" finished at "+local_min+" in "+search.getSteps());
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
+        ForkJoinPool pool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+        SearchParallel task = new SearchParallel(num_searches,rows,columns,terrain);
+        Result result = pool.invoke(task);
+        int min = result.minHeight;
 
         tock();
 
@@ -77,6 +59,7 @@ class MonteCarloMinimization {
         System.out.printf("Grid points visited: %d  (%2.0f%s)\n",tmp,(tmp/(rows*columns*1.0))*100.0, "%");
         tmp=terrain.getGrid_points_evaluated();
         System.out.printf("Grid points evaluated: %d  (%2.0f%s)\n",tmp,(tmp/(rows*columns*1.0))*100.0, "%");
-        System.out.printf("Global minimum: %d at x=%.1f y=%.1f\n\n", min, terrain.getXcoord(tasks.get(finder).getSearch().getPos_row()), terrain.getYcoord(tasks.get(finder).getSearch().getPos_col()) );
+        //System.out.printf("Global minimum: %d", min );
+        System.out.printf("Global minimum: %d at x=%.1f y=%.1f\n\n", min, terrain.getXcoord(result.xPos), terrain.getYcoord(result.yPos));
     }
 }
