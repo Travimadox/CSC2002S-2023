@@ -1,21 +1,18 @@
 JAVAC=/usr/bin/javac
-JAVADOC=/usr/bin/javadoc 
+JAVADOC=/usr/bin/javadoc
 .SUFFIXES: .java .class
 SRCDIR=./src/MonteCarloMini
 BINDIR=./bin/MonteCarloMini
 DOCDIR=doc
+ARGS=""
 
-$(BINDIR)/%.class: $(SRCDIR)/%.java
-	$(JAVAC) -d $(BINDIR)/ -cp $(BINDIR):$(SRCDIR) $<
-	
-CLASSES= SearchParallel.class TerrainArea.class  MonteCarloMinimization.class 
-CLASS_FILES=$(CLASSES:%.class=$(BINDIR)/%.class)
+default:
+	$(JAVAC) -d $(BINDIR)/ -cp $(BINDIR):$(SRCDIR) $(SRCDIR)/*.java
 
-default: $(CLASS_FILES)
 clean:
 	rm $(BINDIR)/*.class
-run: $(CLASS_FILES)
-	java -cp ./bin MonteCarloMini.MonteCarloMinimization
-	
+run: default
+	java -cp ./bin/MonteCarloMini MonteCarloMini.MonteCarloMinimization $(ARGS)
+
 javadoc:
 	$(JAVADOC) -d $(DOCDIR) -sourcepath $(SRCDIR) -classpath $(BINDIR) $(SRCDIR)/*.java
