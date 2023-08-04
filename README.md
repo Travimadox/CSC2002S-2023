@@ -20,7 +20,7 @@ This module introduces the principles and practices of parallel and concurrent p
 - Other topics - GUI’s and cancellation
 
 ### Assignments:
-- PCP1
+- PCP1: check [PCP1](https://github.com/Travimadox/CSC2002S-2023/tree/main/PCP1)
 - PCP2
 
 ## Computer Architecture (Arch) - Mr Lynolan Moodley
