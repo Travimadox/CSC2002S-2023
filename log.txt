@@ -1,0 +1,139 @@
+commit fe8d01f96bae07e0ea12190ad51ad45cd6207e79
+Merge: f8c24c0 02f49d0
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Sat Aug 5 20:30:08 2023 +0200
+
+    Merge branch 'main' of https://github.com/Travimadox/CSC2002S-2023
+
+commit f8c24c0fc0aed08f9f4847008e78fdd09829e32d
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Sat Aug 5 20:29:24 2023 +0200
+
+    Commented the code
+
+commit 02f49d023969476c30a96b861a74cb9ba712f51d
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Fri Aug 4 19:46:59 2023 +0200
+
+    Update README.md
+
+commit a67c82369c032a2cebb38277a84429929e4815b1
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Fri Aug 4 19:44:20 2023 +0200
+
+    Create Readme.md
+
+commit 486d77afc28b80eef0dc8e5f03928f74ea92999a
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:32:35 2023 +0200
+
+    Serial test results
+
+commit 5aeedc6825239eb4c139d309c6fb35e8f23eeade
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:27:32 2023 +0200
+
+    Delete output.csv
+
+commit c62bb18daeeb524b53d029e33d9c430ff7c41e0d
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:26:24 2023 +0200
+
+    Delete org.eclipse.jdt.core.prefs
+
+commit a7fa8ca1ff87485a9818993de3c8587723ac0b37
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:26:14 2023 +0200
+
+    Delete org.eclipse.core.resources.prefs
+
+commit c7d7f691a73e4839aecc0d2d9afbbfc81db3b8f1
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:25:56 2023 +0200
+
+    Delete .DS_Store
+
+commit 8d0c7748c209918300785273fe0db34277e1929e
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:25:37 2023 +0200
+
+    Delete .DS_Store
+
+commit c69a4bf467a73575956115b5a0bc9d5d83561f64
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:25:25 2023 +0200
+
+    Delete .DS_Store
+
+commit 7fa00f7e401c2ee7fa33d95d62315396f26e218c
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:25:10 2023 +0200
+
+    Delete .classpath
+
+commit 5804f2ffa7f495b5f70912199cb27ba9ce8c04f8
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:24:57 2023 +0200
+
+    Delete .project
+
+commit 969864259a003ca08dbc4554d4e89b6372596ebb
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:22:44 2023 +0200
+
+    Delete .DS_Store
+
+commit 84773df523c72085b1dad1e8bb748fc5b6d4aa5f
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:19:38 2023 +0200
+
+    Delete .DS_Store
+
+commit 8ccdeb7ba2e93029bcfd02e59f89ae7b188eee57
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:19:11 2023 +0200
+
+    Delete .DS_Store
+
+commit 6c6689eae14d421b0024d56cec0042f70c5fc4fa
+Merge: 0212a9b 3b90f86
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:18:24 2023 +0200
+
+    Merge branch 'main' of https://github.com/Travimadox/CSC2002S-2023
+
+commit 0212a9bc28df663ea6b50f68b5bbbdd54ffb9b05
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 23:18:15 2023 +0200
+
+    Sorted makefile issue and added tests
+
+commit 3b90f8639328614c8424351c524fa74484a6d350
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 22:56:16 2023 +0200
+
+    Update makefile
+
+commit ed008980b163e9da32f67cf94183b29ceb50a0d5
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Thu Aug 3 18:59:49 2023 +0200
+
+    seond iteration of parallelisation
+
+commit e332cd0f0d73a2901c900f9031712fc513c562ae
+Author: Travimadox <wbbtra001@myuct.ac.za>
+Date:   Tue Aug 1 21:37:32 2023 +0200
+
+    First attemp parallelisation
+
+commit f0d89146ad7bf0423b95ef5164bd5c02cf46ad76
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Tue Aug 1 18:32:07 2023 +0200
+
+    Update README.md
+
+commit d76e22e23e736569b9c3bbc3dd0734febc70078a
+Author: Travimadox Webb <84262709+Travimadox@users.noreply.github.com>
+Date:   Mon Jul 17 01:18:16 2023 +0200
+
+    Initial commit
