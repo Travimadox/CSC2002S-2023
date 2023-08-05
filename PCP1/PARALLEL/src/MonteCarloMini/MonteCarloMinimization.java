@@ -6,18 +6,42 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
+
+/*
+ * MonteCarloMinimization class that takes in the command line arguments and runs the program
+ * author: Travimadox Webb
+ * date: 10/05/2021
+ * version: 1.0
+ * 
+ * 
+ */
 class MonteCarloMinimization {
     static final boolean DEBUG=false;
     static long startTime = 0;
     static long endTime = 0;
 
+    /*
+     * tick method that sets the start time
+     */
+     
     private static void tick(){
         startTime = System.currentTimeMillis();
     }
+
+    /*
+     * tock method that sets the end time
+     */
     private static void tock(){
         endTime=System.currentTimeMillis();
     }
 
+
+    /*
+     * Main method that takes in the command line arguments and runs the program
+     * 
+     * @param args - command line arguments
+     * 
+     */
     public static void main(String[] args)  {
         if (args.length != 7) {
             System.out.println("Incorrect number of command line arguments provided.");
