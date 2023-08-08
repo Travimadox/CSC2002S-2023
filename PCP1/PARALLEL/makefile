@@ -2,8 +2,9 @@ JAVAC=/usr/bin/javac
 JAVADOC=/usr/bin/javadoc
 .SUFFIXES: .java .class
 SRCDIR=./src/MonteCarloMini
-BINDIR=./bin
-BINDIRCLEAN = ./bin/MonteCarloMini
+BINDIR=./bin/MonteCarloMini
+BINDIRCLEAN=./bin/MonteCarloMini/MonteCarloMini
+
 DOCDIR=doc
 ARGS=""
 
