@@ -70,14 +70,37 @@ public class ClubGrid {
 		return true;
 	}
 	
-	public synchronized GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
+	/*public synchronized GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
+
+		// Wait while the club is at capacity or the entrance is occupied.
+		while (counter.overCapacity() || entrance.occupied()) { 
+			wait(); 
+		}
+
 		counter.personArrived(); //add to counter of people waiting 
 		entrance.get(myLocation.getID());
 		counter.personEntered(); //add to counter
 		myLocation.setLocation(entrance);
 		myLocation.setInRoom(true);
 		return entrance;
+	}*/
+
+	public synchronized GridBlock enterClub(PeopleLocation myLocation) throws InterruptedException  {
+		counter.personArrived(); // Increment the count of people who arrived
+		
+		// Wait while the club is at capacity or the entrance is occupied.
+		while (counter.overCapacity() || entrance.occupied()) { 
+			wait(); 
+		}
+	
+		//counter.personArrived(); // Increment the count of people who arrived
+		entrance.get(myLocation.getID());
+		counter.personEntered(); // Increment the inside count
+		myLocation.setLocation(entrance);
+		myLocation.setInRoom(true);
+		return entrance;
 	}
+	
 	
 	
 	public GridBlock move(GridBlock currentBlock,int step_x, int step_y,PeopleLocation myLocation) throws InterruptedException {  //try to move in 
@@ -111,7 +134,10 @@ public class ClubGrid {
 			currentBlock.release();
 			counter.personLeft(); //add to counter
 			myLocation.setInRoom(false);
-			entrance.notifyAll();
+			//entrance.notifyAll();
+			synchronized(entrance) {
+				entrance.notifyAll();
+			}
 	}
 
 	public GridBlock getExit() {

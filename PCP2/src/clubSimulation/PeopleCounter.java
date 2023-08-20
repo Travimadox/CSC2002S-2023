@@ -64,4 +64,7 @@ public class PeopleCounter {
 		peopleOutSide.set(0);
 		peopleLeft.set(0);
 	}
+
+
+
 }
