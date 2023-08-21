@@ -21,7 +21,7 @@ This module introduces the principles and practices of parallel and concurrent p
 
 ### Assignments:
 - PCP1: check [PCP1](https://github.com/Travimadox/CSC2002S-2023/tree/main/PCP1)
-- PCP2
+- PCP2: check [PCP2](https://github.com/Travimadox/CSC2002S-2023/tree/main/PCP2)
 
 ## Computer Architecture (Arch) - Mr Lynolan Moodley
 
