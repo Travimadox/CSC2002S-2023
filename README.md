@@ -40,7 +40,7 @@ This section provides an introduction to high-level concepts in modern computer 
 - Additional topics, such as interfacing, GPUs, and USB
 
 ### Assignments:
-- ARCH1
+- ARCH1: check [PCP1](https://github.com/Travimadox/CSC2002S-2023/tree/main/ARCH1)
 - ARCH2
 
 ## Mobile Design and Development (MDD) - Prof. Melissa Densmore
