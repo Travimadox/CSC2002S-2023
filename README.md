@@ -41,7 +41,7 @@ This section provides an introduction to high-level concepts in modern computer 
 
 ### Assignments:
 - ARCH1: check [ARCH1](https://github.com/Travimadox/CSC2002S-2023/tree/main/ARCH1)
-- ARCH2
+- ARCH2: check [ARCH2](https://github.com/Travimadox/CSC2002S-2023/tree/main/ARCH2)
 
 ## Mobile Design and Development (MDD) - Prof. Melissa Densmore
 
@@ -56,7 +56,7 @@ Mobile Development offers an in-depth discussion on evolving mobile interface de
 - Input and Visualizations
 
 ### Assignments:
-- MDD1
+- MDD1: check [MDD1](https://github.com/Travimadox/CSC2002S-2023/tree/main/MDD1)
 
 Please navigate to the respective folders to find each assignment's details and the provided solutions.
 
