@@ -44,8 +44,11 @@
 #    Write New_G to output_fd
 #   Write New_B to output_fd
 #
-# Calculate average_original = sum_original / (4096 * 3)
-# Calculate average_new = sum_new / (4096 * 3)
+# Calculate average_original = sum_original / (4096*3)
+# average_original = average_original / 255
+#
+# Calculate average_new = sum_new / (4096*3)
+# average_new = average_new / 255
 #
 # Display average_original
 # Display average_new
@@ -57,11 +60,13 @@
 ####################################################################################################################################################################
 
 .data
-    input_fd: .space 100 # input file descriptor
-    output_fd: .space 100 # output file descriptor
-    buffer: .space 100 # buffer to read lines from file
-    input_prompt: .asciiz "Enter the name of the input file:\n " # prompt for input file name
-    output_prompt: .asciiz "Enter the name of the output file:\n " # prompt for output file name
+    input_fd: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Input\jet_64_in_ascii_cr.ppm"# input file descriptor
+    output_fd: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Output\Jet.ppm"# output file descriptor
+    buffer: .space 5 # buffer to read lines from file
+    line1: .space 3 # buffer to read lines from file
+    line2: .space 6 # buffer to read lines from file
+    line3: .space 6 # buffer to read lines from file
+    line4: .space 4 # buffer to read lines from file
     average_original_prompt: .asciiz "The average of all RGB values of the original file is: \n" # prompt for average_original
     average_new_prompt: .asciiz "The average of all RGB values of the new file is: \n" # prompt for average_new
 
@@ -71,20 +76,13 @@
 
 main:
 ################################################### Input file handling ##########################################################################################
-    #Prompt user for input file name
-    li $v0, 4 # system call for print_str
-    la $a0, input_prompt # load input_prompt into $a0
-    syscall # print input_prompt
-
-    #Read input file name
-    li $v0, 8 # system call for read_str
-    la $a0, buffer # load buffer into $a0
-    li $a1, 100 # buffer size
-    syscall # read input file name
+    # Initialize stack frame for main
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
 
     #Open input file
     li $v0, 13 # system call for open
-    la $a0, buffer # load buffer into $a0
+    la $a0, input_fd # load buffer into $a0
     li $a1, 0 # flag for reading
     li $a2, 0 # mode is ignored
     syscall # open input file
@@ -93,20 +91,11 @@ main:
     move $s0, $v0 # save input file descriptor
 
 ################################################### Output file handling #######################################################################################
-    #Prompt user for output file name
-    li $v0, 4 # system call for print_str
-    la $a0, output_prompt # load output_prompt into $a0
-    syscall # print output_prompt
-
-    #Read output file name
-    li $v0, 8 # system call for read_str
-    la $a0, buffer # load buffer into $a0
-    li $a1, 100 # buffer size
-    syscall # read output file name
+    
 
     #Open output file
     li $v0, 13 # system call for open
-    la $a0, buffer # load buffer into $a0
+    la $a0, output_fd # load buffer into $a0
     li $a1, 1 # flag for writing
     li $a2, 0 # mode is ignored
     syscall # open output file
@@ -116,61 +105,102 @@ main:
 
 
 ################################################### Copy header ################################################################################################
-    jal copy_header # jump to copy_header
+    #jal copy_header # jump to copy_header
+    # Do it manually instead
+    # Read line 1 from input_fd into buffer
+    li $v0, 14 # system call for read
+    move $a0, $s0 # load input file descriptor into $a0
+    la $a1, line1 # load buffer into $a1
+    li $a2, 3 # buffer size
+    syscall # read a line from input_fd into buffer
+
+    # Write line 1 from buffer into output_fd
+    li $v0, 15 # system call for write
+    move $a0, $s1 # load output file descriptor into $a0
+    la $a1, line1 # load buffer into $a1
+    move $a2, $v0 # amount read from input
+    syscall # write a line to output_fd from buffer
+
+    # Read line 2 from input_fd into buffer
+    li $v0, 14 # system call for read
+    move $a0, $s0 # load input file descriptor into $a0
+    la $a1, line2 # load buffer into $a1
+    li $a2, 6 # buffer size
+    syscall # read a line from input_fd into buffer
+
+    # Write line 2 from buffer into output_fd
+    li $v0, 15 # system call for write
+    move $a0, $s1 # load output file descriptor into $a0
+    la $a1, line2 # load buffer into $a1
+    move $a2, $v0 # amount read from input
+    syscall # write a line to output_fd from buffer
+
+    # Read line 3 from input_fd into buffer
+    li $v0, 14 # system call for read
+    move $a0, $s0 # load input file descriptor into $a0
+    la $a1, line3 # load buffer into $a1
+    li $a2, 6 # buffer size
+    syscall # read a line from input_fd into buffer
+    
+    # Write line 3 from buffer into output_fd
+    li $v0, 15 # system call for write
+    move $a0, $s1 # load output file descriptor into $a0
+    la $a1, line3 # load buffer into $a1
+    move $a2, $v0 # amount read from input
+    syscall # write a line to output_fd from buffer
+
+    # Read line 4 from input_fd into buffer
+    li $v0, 14 # system call for read
+    move $a0, $s0 # load input file descriptor into $a0
+    la $a1, line4 # load buffer into $a1
+    li $a2, 4 # buffer size
+    syscall # read a line from input_fd into buffer
+
 
 ################################################## Increase brightness ########################################################################################
     jal increase_brightness # jump to increase_brightness
 
 ################################################### Calculate average_original ###############################################################################
-    # Calculate average_original = sum_original / 4096
-    li $t0, 4096 # load 4096 into $t0
-
-    # Move integer to floating point registers for average_original
-    mtc1 $s4, $f0
-    mtc1 $t0, $f2
-
-    # Convert integers to floats
-    cvt.s.w $f0, $f0
-    cvt.s.w $f2, $f2
-
-    # Divide the floats
-    div.s $f12, $f0, $f2
+    # Calculate average_original = sum_original / (4096*3)
+    # average_original = average_original / 255
+    li $t0, 4096 # initialize 4096 to $t0
+    li $t1, 3 # initialize 3 to $t1
+    mul $t0, $t0, $t1 # multiply 4096 by 3
+    div $s4, $s4, $t0 # divide sum_original by 4096*3
+    li $t2, 255 # initialize 255 to $t2
+    div $s4, $s4, $t2 # divide sum_original by 255
+    
 
 ####################################################### Display average_original ##############################################################################
-    # Display average_original_prompt
-    li $v0, 4
+   # Display average_original_prompt
+    li $v0, 4 # system call for print_str
     la $a0, average_original_prompt
-    syscall
-
+    syscall 
     # Display average_original
-    li $v0, 2
-    syscall
+    li $v0, 2 
+    move $a0, $s4 
+    syscall 
 
 ################################################### Calculate average_new ####################################################################################
-    # Calculate average_new = sum_new / 4096
-    li $t0, 4096 # load 4096 into $t0
-
-    # Move integer to floating point registers for average_new
-    mtc1 $s5, $f4
-    mtc1 $t0, $f6
-
-    # Convert integers to floats
-    cvt.s.w $f4, $f4
-    cvt.s.w $f6, $f6
-
-    # Divide the floats
-    div.s $f12, $f4, $f6
+   # Calculate average_new = sum_new / (4096*3)
+    # average_new = average_new / 255
+     li $t0, 4096 # initialize 4096 to $t0
+     li $t1, 3 # initialize 3 to $t1
+     mul $t0, $t0, $t1 # multiply 4096 by 3
+     div $s5, $s5, $t0 # divide sum_new by 4096*3
+     li $t2, 255 # initialize 255 to $t2
+     div $s5, $s5, $t2 # divide sum_new by 255
 
 ########################################################## Display average_new ###############################################################################
     # Display average_new_prompt
-    li $v0, 4
-    la $a0, average_new_prompt
-    syscall
+    li $v0, 4 # system call for print_str
+    la $a0, average_new_prompt # load average_new_prompt into $a0
+    syscall # print average_new_prompt
 
-    # Display average_new
-    li $v0, 2
-    syscall
-
+    # Display average_new as float
+    li $v0, 2 # system call for print_int
+    move $a0, $s5 # load average_new into $a0
+    syscall # print average_new
 
 
 
@@ -187,6 +217,12 @@ main:
     move $a0, $s1 # load output file descriptor into $a0
     syscall # close output_fd
 
+
+
+    # Restore $ra and remove the main's stack frame
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+
 ######################################################################## Exit ########################################################################
     # Exit
     li $v0, 10 # system call for exit
@@ -194,52 +230,6 @@ main:
 
 
 
-
-###################### Copy Header ###############################################################
-# Function : copy_header
-# Last modified : 20th September, 2023
-##################################################################################################
-# Functional Description :
-# This function copies the header of the input file to the output file
-##################################################################################################
-# Register Usage in copy_header
-# $s0 - input file descriptor
-# $s1 - output file descriptor
-# $s2 - buffer
-# $s3 - loop counter
-##################################################################################################
-# Pseudo Code:
-# FOR each line in the header (1 to 4)
-#    Read a line from input_fd into buffer
-#    Write the line from buffer into output_fd
-##################################################################################################
-
-copy_header:
-    # FOR each line in the header (1 to 4)
-    li $s3, 4 # initialize loop counter to 4
-
-    copy_header_loop:
-        # Read a line from input_fd into buffer
-        li $v0, 14 # system call for read
-        move $a0, $s0 # load input file descriptor into $a0
-        la $a1, buffer # load buffer into $a1
-        li $a2, 100 # buffer size
-        syscall # read a line from input_fd into buffer
-
-        # Write the line from buffer into output_fd
-        li $v0, 15 # system call for write
-        move $a0, $s1 # load output file descriptor into $a0
-        la $a1, buffer # load buffer into $a1
-        syscall # write the line from buffer into output_fd
-
-        # Decrement loop counter
-        addi $s3, $s3, -1 # decrement loop counter
-
-        # Check if loop counter is 0
-        bne $s3, $zero, copy_header_loop # if loop counter is not 0, repeat loop
-
-    # Exit
-    jr $ra # return to main
 
 
 ###################### Increase Brightness #######################################################
@@ -256,11 +246,12 @@ copy_header:
 # $s3 - loop counter
 # $s4 - sum_original
 # $s5 - sum_new
-# $t0 - Old_Pixel
-# $t1 - New_Pixel
-# $t2 - Max Pixel value
-# $t3 - Brightness factor
-# $t4 - New Pixel ASCII character
+# $t0 - R, G, B integer
+# $t1 - New_R, New_G, New_B integer
+# $t2 - 255
+# $t3 - brightness factor
+# $t8 - loop counter
+# $t9 - loop counter
 ##################################################################################################
 # Pseudo Code:
 # FOR each pixel (1 to 4096)
@@ -287,6 +278,10 @@ copy_header:
 ##################################################################################################
 
 increase_brightness:
+    # Save $ra
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+
     # FOR each pixel (1 to 4096)
     li $s3, 4096 # initialize loop counter to 4096
     li $s4, 0 # initialize sum_original to 0
@@ -294,73 +289,62 @@ increase_brightness:
     li $t3, 10 # initialize brightness factor to 10
     li $t2, 255 # initialize max value to 255
 
-    #Skip the first 4 lines of the file
-    li $t8, 4 # initialize loop counter to 4
+    increase_brightness_loop:
+        li $t9, 3 # Loop counter to read R, G, B
 
-    skip_first_4_lines:
-        # Read a line from input_fd into buffer
+    read_rgb_loop:
+        # Read value into buffer
         li $v0, 14 # system call for read
         move $a0, $s0 # load input file descriptor into $a0
         la $a1, buffer # load buffer into $a1
-        li $a2, 100 # buffer size
+        li $a2, 5 # buffer size
         syscall # read a line from input_fd into buffer
 
-        # Decrement loop counter
-        addi $t8, $t8, -1 # decrement loop counter
+        # Convert string to integer
+        move $a1, $a1 # buffer pointer
+        jal str2int # jump to str2int
+        move $t0, $v0 # Now $t0 contains the integer value
 
-        # Check if loop counter is 0
-        bne $t8, $zero, skip_first_4_lines # if loop counter is not 0, repeat loop`
-
-    increase_brightness_loop:
-        # Read Pixel from input_fd and convert to integer
-        li $v0, 14 # system call for read
-        move $a0, $s0 # load input file descriptor into $a0
-        la $a1, buffer # load buffer into $a1
-        li $a2, 100 # buffer size
-        syscall # read pixel from input_fd into buffer
-
-        # Convert ASCII pixel to integer
-        jal str2int 
-        move $t0, $v0 # save R in $t0
-
-       
-        # Add pixel to sum_original
-        add $s4, $s4, $t0 # add R to sum_original
-       
+        # Add to sum_original
+        add $s4, $s4, $t0 
 
         # Increase brightness
-        add $t1, $t0, $t3 # add 10 to pixel
+        add $t1, $t0, $t3
 
-        # Check if pixel + 10 > 255
-        bgt $t1, $t2, set_brightness_max # if pixel + 10 > 255, set pixel to 255
+        # Check if the new value exceeds maximum
+        bgt $t1, $t2, set_max_value
+        j continue_after_set_max
+       
+    set_max_value:
+        li $t1, 255
 
-        # Set pixel >255 to 255
-        set_brightness_max:
-            li $t1, 255 # load 255 into $t1
+    continue_after_set_max:
+        add $s5, $s5, $t1 # Add to sum_new
+
+        # Convert integer to string
+        move $t7, $t1 
+        la $a1, buffer 
+        jal int2str 
         
-        # Add pixel to sum_new
-        add $s5, $s5, $t1 # add pixel to sum_new
+        
 
-        # Convert pixel to ASCII character
-        jal int2str
-        move $t4, $v0 # save pixel in $t4
+        # Write the value to the output file
+        li $v0, 15
+        move $a0, $s1
+        la $a1, buffer
+        li $a2, 5
+        syscall
 
-        # Write pixel to output_fd
-        li $v0, 15 # system call for write
-        move $a0, $s1 # load output file descriptor into $a0
-        move $a1, $t4 # load new pixel into $a1
-        syscall # write pixel to output_fd
+        addi $t9, $t9, -1
+        bnez $t9, read_rgb_loop
 
-        # Increment loop counter
-        addi $s3, $s3, -1 # decrement loop counter
+        addi $s3, $s3, -1
+        bnez $s3, increase_brightness_loop
 
-
-        # Check if loop counter is 0
-        bne $s3, $zero, increase_brightness_loop # if loop counter is not 0, repeat loop
-
-    # Exit
-    jr $ra # return to main
-
+    # Return to caller
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
 
 
 
@@ -392,6 +376,10 @@ increase_brightness:
 
 
 str2int:
+    # Save $ra
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
+
     # Convert pixel to integer
     li $t7, 0 # initialize integer to 0
     li $t8, 0 # initialize loop counter to 0
@@ -421,6 +409,8 @@ str2int:
     str2int_end:
         # Exit
         move $v0, $t7 # save integer in $v0
+        lw $ra, 0($sp)
+        addi $sp, $sp, 4
         jr $ra # return to increase_brightness
 
 
@@ -444,29 +434,42 @@ str2int:
 ##################################################################################################
 
 int2str:
-    # Convert pixel to ASCII character
-    li $t8, 0 # initialize loop counter to 0
-    li $t9, 0 # initialize loop counter to 0
+    # Save $ra
+    addi $sp, $sp, -4
+    sw $ra, 0($sp)
 
-    int2str_loop:
-        # Check if integer is 0
-        beq $t7, $zero, int2str_end # if integer is 0, exit loop
+    # Initialize loop counter and buffer index
+    li $t8, 0
+    li $t6, 10
 
-        # Convert integer to ASCII character
-        div $t7, $t0 # divide integer by 10
-        mflo $t9 # save remainder in $t9
-        add $t9, $t9, $t0 # add 48 to remainder
-        sb $t9, 0($a1) # save remainder in buffer
+    # Reverse the integer to convert from least significant digit to most
+    li $t7, 0
+    int2str_reverse_loop:
+        beq $a0, $zero, int2str_conversion_loop
+        div $a0, $t6
+        mfhi $t9
+        mul $t7, $t7, $t6
+        add $t7, $t7, $t9
+        divu $a0, $a0, $t6
+        j int2str_reverse_loop
 
-        # Increment loop counter
-        addi $t8, $t8, 1 # increment loop counter
-
-        # Increment buffer pointer
-        addi $a1, $a1, 1 # increment buffer pointer
-
-        # Check if loop counter is 3
-        bne $t8, 3, int2str_loop # if loop counter is not 3, repeat loop
+    # Convert reversed integer to ASCII character
+    int2str_conversion_loop:
+        beq $t7, $zero, int2str_end
+        div $t7, $t6
+        mfhi $t9
+        addiu $t9, $t9, 48
+        sb $t9, 0($a1)
+        addi $a1, $a1, 1
+        divu $t7, $t7, $t6
+        j int2str_conversion_loop
 
     int2str_end:
-        # Exit
-        jr $ra # return to increase_brightness
+    # Null-terminate the string
+    sb $zero, 0($a1)
+
+    # Exit
+    lw $ra, 0($sp)
+    addi $sp, $sp, 4
+    jr $ra
+
