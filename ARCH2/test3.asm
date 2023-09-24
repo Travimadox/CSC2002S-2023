@@ -1,9 +1,9 @@
 #MIPS program read file line by line and proint out each line
 
 .data
-    filename_in: .asciiz "C:\Users\User\Downloads\sample_images\house_64_in_ascii_lf.ppm"
+    filename_in: .asciiz "C:\Users\User\Downloads\sample_images\house_64_in_ascii_cr.ppm"
     filename_out: .asciiz "C:\Users\User\Downloads\sample_images\house_64_out_ascii_cr.ppm"
-    buffer: .space 4 # buffer to read lines from file
+    buffer: .space 5 # buffer to read lines from file
     line1: .space 3 # buffer to read lines from file
     line2: .space 6 # buffer to read lines from file
     line3: .space 6 # buffer to read lines from file
@@ -51,7 +51,7 @@ main:
 
 #########################################################################################################
 copy_header:
-     #read first four lines first
+    #read first four lines first
     #line1
     li $v0, 14 # system call for read from file
     move $a0, $s0 # file descriptor

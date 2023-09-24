@@ -10,7 +10,7 @@ main:
     sw $ra, 0($sp)
 
     # Initialize integer in $a0
-    li $a0, 1234
+    li $a0, 100
 
     # Load the address of output_buffer into $a1
     la $a1, output_buffer

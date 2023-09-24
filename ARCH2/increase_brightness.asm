@@ -242,7 +242,6 @@ main:
 # Register Usage in increase_brightness
 # $s0 - input file descriptor
 # $s1 - output file descriptor
-# $s2 - buffer
 # $s3 - loop counter
 # $s4 - sum_original
 # $s5 - sum_new
@@ -297,7 +296,7 @@ increase_brightness:
         li $v0, 14 # system call for read
         move $a0, $s0 # load input file descriptor into $a0
         la $a1, buffer # load buffer into $a1
-        li $a2, 5 # buffer size
+        li $a2, 4 # buffer size
         syscall # read a line from input_fd into buffer
 
         # Convert string to integer
