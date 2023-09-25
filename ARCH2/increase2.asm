@@ -1,7 +1,87 @@
-################################################################
-# Description to be added
-################################################################
+################### Main Program Header ################################################################################################################################
+# Program 1 : increase_brightness.asm 
+# Programmer : Travimadox Webb
+# Due Date : 29th September, 2023 Course: CSC2002S
+# Last Modified : 25th September, 2023
+####################################################################################################################################################################
+# Overall Program Functional Description :
+# This program reads in a PPM file and increases the each RGB value by 10
+# After execution display the average of all RGB values of the original file, as well the average of all RGB values of the new file, as a double value on the console
+# ####################################################################################################################################################################
+# Register Usage in Main:
+# s0 = input file descriptor
+# s1 = output file descriptor
+# t0 = input buffer address pointer
+# t1 = output buffer address pointer
+# s2 = Sum of all RGB values of the original file
+# s3 = Sum of all RGB values of the new file
+# s4 = Counter for the number of rgb values in the file
+# t2 = Temporary register to hold the byte read from the file
+# t3 = Temporary register to hold the integer value of the byte read from the file
+# t4 = Temporary register to hold the value 255
+# t5 = Temporary register to hold the value 10
+# t6 = Temporary register to hold the value 10
+# t7 = Temporary register to hold the reversed integer
+# t8 = Temporary register to hold the loop counter
+# t9 = Temporary register to hold the value 10
+# f0 = Temporary register to hold the sum of all RGB values of the original file
+# f1 = Temporary register to hold the value 12286 * 255
+# f2 = Temporary register to hold the average of all RGB values of the original/new file
+# f12 = Temporary register to hold the average of all RGB values of the original/new file
+# ####################################################################################################################################################################
+# Pseudocode:
+# Initialize variables:
+#   filename_in = "Absolute path to input file"
+#   filename_out = "Absolute path to output file"
+#   input_buffer = "Buffer to hold the input file"
+#   output_buffer = "Buffer to hold the output file"
+#   reverse_buffer = "Buffer to hold the reverse of the integer"
+#   average_original_prompt = "The average of all RGB values of the original file is: \n"
+#   average_new_prompt = "The average of all RGB values of the new file is: \n"
+#
+# Open input file in read mode
+#    -> Save the file descriptor to s0
+#    -> Read the file into input_buffer
+#
+# Open output file in write mode
+#   -> Save the file descriptor to s1
+#
+# Process the first 4 lines of the file
+#   -> Write the first 4 lines of the file to the output buffer with P2 as the first line
+#
+# FOR each pixel (1 to 4096)
+#   Read R from input_buffer
+#   Convert R to integer
+#   Read G from input_buffer
+#   Convert G to integer
+#   Read B from input_buffer
+#   Convert B to integer
+#
+#   Add R, G, B to sum_original
+#
+#   New_R = min(R + 10, 255)
+#   New_G = min(G + 10, 255)
+#   New_B = min(B + 10, 255)
+#
+#   Add New_R, New_G, New_B to sum_new
+#
+#   Convert New_R to string and store in output_buffer
+#   Convert New_G to string and store in output_buffer
+#   Convert New_B to string and store in output_buffer
+#
+# Calculate average_original = sum_original / 12286*255
+# Calculate average_new = sum_new / 12286*255
+#
+# Display average_original
+# Display average_new
+#
+# Close file descriptors
+#
+# Exit
+####################################################################################################################################################################
 
+
+#### Data Segment ###################################################################################################################################################
 .data
     filename_in: .asciiz "C:\Users\User\Downloads\sample_images\house_64_in_ascii_crlf.ppm"
     filename_out: .asciiz "C:\Users\User\Downloads\sample_images\house_64_out_ascii_cr.ppm"
@@ -16,92 +96,93 @@
 .text
 .globl main
 
-################################################################
-# Main function
-# s0 = input file descriptor
-# s1 = output file descriptor
-# t0 = input buffer address pointer
-# t1 = output buffer address pointer
-################################################################
+
+#### Main Program ###################################################################################################################################################
 main:
-    # Open the input file
-    li $v0, 13 # system call for open file
-    la $a0, filename_in # input filename
-    li $a1, 0 # flag for reading
-    li $a2, 0 # mode is ignored
-    syscall # open a file (file descriptor returned in $v0)
+#### File IO ########################################################################################################################################################
+    # Open the input file in read mode and save the file descriptor to s0
+    li $v0, 13 
+    la $a0, filename_in 
+    li $a1, 0 
+    li $a2, 0 
+    syscall 
 
-    move $s0, $v0 # save the input file descriptor
+    move $s0, $v0 
 
-    # Open the output file
-    li $v0, 13 # system call for open file
-    la $a0, filename_out # output filename
-    li $a1, 1 # flag for writing
-    li $a2, 0 # mode is ignored
-    syscall # open a file (file descriptor returned in $v0)
+    # Open the output file in write mode and save the file descriptor to s1
+    li $v0, 13 
+    la $a0, filename_out 
+    li $a1, 1 
+    li $a2, 0 
+    syscall 
 
-    move $s1, $v0 # save the output file descriptor
+    move $s1, $v0 
 
-     #Read the input file
-    li $v0, 14 # system call for read file
-    move $a0, $s0 # file descriptor to read
-    la $a1, input_buffer # address of buffer from which to read
-    li $a2, 60000 # hardcoded buffer length
-    syscall # read from file
+    # Read the input file into the input buffer
+    li $v0, 14 
+    move $a0, $s0 
+    la $a1, input_buffer 
+    li $a2, 60000 
+    syscall 
 
-    # load pointers
+    # Load pointers
     la $t0, input_buffer # load the address of the input buffer
     la $t1, output_buffer # load the address of the output buffer
 
-    
+
+#### Image Processing ##############################################################################################################################################
 
 
-####COpying the first 4 lines of the file##################################################
-    #Test writing with the first for lines
-    #Write the first 4 lines of the file
+#### process the first 4 lines of the file##################################################
+ 
     li $t9, 10 #load the ASCII value of the new line character
-    #line1(2bytes and EOL)
-    lb $t2, 0($t0) # load the first byte of the input buffer
-    sb $t2, 0($t1) # store the first byte of the input buffer to the output buffer
-    lb $t2, 1($t0) # load the second byte of the input buffer
-    sb $t2, 1($t1) # store the second byte of the input buffer to the output bufferr
+
+    # Process line1(2bytes and EOL)
+    lb $t2, 0($t0) # load the first byte of the line1
+    sb $t2, 0($t1) # store the first byte of the line1 to the output buffer
+    lb $t2, 1($t0) # load the second byte of the line1
+    sb $t2, 1($t1) # store the second byte of the line1 to the output bufferr
     sb $t9, 2($t1) # null terminate the output buffer
 
-    #line2(5bytes and EOL)
-    lb $t2, 3($t0) # load the first byte of the input buffer
-    sb $t2, 3($t1) # store the first byte of the input buffer to the output buffer
-    lb $t2, 4($t0) # load the second byte of the input buffer
-    sb $t2, 4($t1) # store the second byte of the input buffer to the output bufferr
-    lb $t2, 5($t0) # load the third byte of the input buffer
-    sb $t2, 5($t1) # store the third byte of the input buffer to the output bufferr
-    lb $t2, 6($t0) # load the fourth byte of the input buffer
-    sb $t2, 6($t1) # store the fourth byte of the input buffer to the output bufferr
-    lb $t2, 7($t0) # load the fifth byte of the input buffer
-    sb $t2, 7($t1) # store the fifth byte of the input buffer to the output bufferr
+    # Process line2(5bytes and EOL)
+    lb $t2, 3($t0) # load the first byte of the line2
+    sb $t2, 3($t1) # store the first byte of the line2 to the output buffer
+    lb $t2, 4($t0) # load the second byte of the line2
+    sb $t2, 4($t1) # store the second byte of the line2 to the output bufferr
+    lb $t2, 5($t0) # load the third byte of the line2
+    sb $t2, 5($t1) # store the third byte of the line2 to the output bufferr
+    lb $t2, 6($t0) # load the fourth byte of the line2
+    sb $t2, 6($t1) # store the fourth byte of the line2 to the output bufferr
+    lb $t2, 7($t0) # load the fifth byte of the line2
+    sb $t2, 7($t1) # store the fifth byte of the line2 to the output bufferr
     sb $t9, 8($t1) # null terminate the output buffer
 
-    #line3(5bytes and EOL)
-    lb $t2, 9($t0) # load the first byte of the input buffer
-    sb $t2, 9($t1) # store the first byte of the input buffer to the output buffer
-    lb $t2, 10($t0) # load the second byte of the input buffer
+    # Process line3(5bytes and EOL)
+    lb $t2, 9($t0) # load the first byte of the line3
+    sb $t2, 9($t1) # store the first byte of the line3 to the output buffer
+    lb $t2, 10($t0) # load the second byte of the line3
     sb $t2, 10($t1) # store the second byte of the input buffer to the output bufferr
-    lb $t2, 11($t0) # load the third byte of the input buffer
-    sb $t2, 11($t1) # store the third byte of the input buffer to the output bufferr
-    lb $t2, 12($t0) # load the fourth byte of the input buffer
-    sb $t2, 12($t1) # store the fourth byte of the input buffer to the output bufferr
-    lb $t2, 13($t0) # load the fifth byte of the input buffer
-    sb $t2, 13($t1) # store the fifth byte of the input buffer to the output bufferr
+    lb $t2, 11($t0) # load the third byte of the line3
+    sb $t2, 11($t1) # store the third byte of the line3 to the output bufferr
+    lb $t2, 12($t0) # load the fourth byte of the line3
+    sb $t2, 12($t1) # store the fourth byte of the line3 to the output bufferr
+    lb $t2, 13($t0) # load the fifth byte of the line3
+    sb $t2, 13($t1) # store the fifth byte of the line3 to the output bufferr
     sb $t9, 14($t1) # null terminate the output buffer
 
-    #line4(3bytes and EOL)
-    lb $t2, 15($t0) # load the first byte of the input buffer
-    sb $t2, 15($t1) # store the first byte of the input buffer to the output buffer
-    lb $t2, 16($t0) # load the second byte of the input buffer
-    sb $t2, 16($t1) # store the second byte of the input buffer to the output bufferr
-    lb $t2, 17($t0) # load the third byte of the input buffer
-    sb $t2, 17($t1) # store the third byte of the input buffer to the output bufferr
+    # Process line4(3bytes and EOL)
+    lb $t2, 15($t0) # load the first byte of the line4
+    sb $t2, 15($t1) # store the first byte of the line4 to the output buffer
+    lb $t2, 16($t0) # load the second byte of the line4
+    sb $t2, 16($t1) # store the second byte of the line4 to the output bufferr
+    lb $t2, 17($t0) # load the third byte of the line4
+    sb $t2, 17($t1) # store the third byte of the line4 to the output bufferr
     sb $t9, 18($t1) # null terminate the output buffer
-    
+
+
+#### Process the pixels ################################################################################
+
+    # Increment the pointers to the start of the pixel values  
     addi $t0, $t0, 19
     addi $t1, $t1, 19
 
@@ -110,7 +191,7 @@ main:
     #Looping to process the pixels
     li $s2, 0 #Sum of all RGB values of the original file
     li $s3, 0 #Sum of all RGB values of the new file
-    li $s4, 12286 #Counter for the number of rgb values in the file
+    li $s4, 12286 #Counter for the number of RGB values in the file
 
 loop:
     #Read R,g or b value and convert it to integer
@@ -143,17 +224,6 @@ loop:
         j read_loop
 
     read_loop_end:
-        #integr value is now in $t3
-        # print the integer value
-        #move $a0, $t3 # load the integer value
-        #li $v0, 1 # system call for print_int
-        #syscall # print the integer value
-
-        # print a new line
-        #li $v0, 11 # system call for print character
-        #li $a0, 10 # ASCII code for new line
-        #syscall # print the new line character
-
         #Add the value to the sum of all RGB values of the original file
         add $s2, $s2, $t3
 
@@ -173,7 +243,7 @@ loop:
         add $s3, $s3, $t3
         
 
-        #Convert the integer to a string
+       # Convert the integer to a string
        # Initialize loop counter and buffer index
         li $t8, 0
         li $t6, 10
@@ -209,14 +279,14 @@ loop:
 
     # decrement the counter
     addi $s4, $s4, -1
-    add $t0, $t0, 1 #increment the pointer tom amke sure we are at the next byte
-    add $t1, $t1, 1 #increment the pointer tom amke sure we are at the next byte
+    add $t0, $t0, 1 #increment the pointer to make sure we are at the next byte
+    add $t1, $t1, 1 #increment the pointer to make sure we are at the next byte
     j loop
 
 
 loop_end:
-    #Calculate the average of all RGB values of the original file
-    #Divide the sum by 12286
+    # Calculate the average of all RGB values of the original file
+    # Divide the sum by 12286*255
     li $t4, 3132930 #12286*255
 
     mtc1 $s2, $f0  # $f0 now has the sum
@@ -227,18 +297,18 @@ loop_end:
 
     div.s $f2, $f0, $f1  # $f2 = $f0 / $f1
 
-    # display the average of all RGB values of the original file
-    li $v0, 4 # system call for print_str
-    la $a0, average_original_prompt # load the address of the prompt string
-    syscall # print the prompt string
+    # Display the average of all RGB values of the original file
+    li $v0, 4 
+    la $a0, average_original_prompt 
+    syscall 
 
-    #print the average
-    mov.s $f12, $f2 # load the average of all RGB values of the original file
-    li $v0, 2 # system call for print_int
-    syscall # print the average of all RGB values of the original file
+    # Print the average
+    mov.s $f12, $f2 
+    li $v0, 2 
+    syscall 
 
     # Calculate the average of all RGB values of the new file   
-    #Divide the sum by 12286
+    # Divide the sum by 12286 * 255
     li $t4, 3132930 #12286*255
     mtc1 $s3, $f0  # $f0 now has the sum
     mtc1 $t4, $f1  # $f1 now has 12286 * 255
@@ -248,39 +318,39 @@ loop_end:
 
     div.s $f2, $f0, $f1  # $f2 = $f0 / $f1
 
-    # display the average of all RGB values of the new file
-    li $v0, 4 # system call for print_str
-    la $a0, average_new_prompt # load the address of the prompt string
-    syscall # print the prompt string
+    # Display the average of all RGB values of the new file
+    li $v0, 4 
+    la $a0, average_new_prompt 
+    syscall 
 
     #print the average
-    mov.s $f12, $f2 # load the average of all RGB values of the original file
-    li $v0, 2 # system call for print_int
-    syscall # print the average of all RGB values of the original file
+    mov.s $f12, $f2 
+    li $v0, 2 
+    syscall 
 
 
 
 
 
     # Write to file now using the output buffer
-    li $v0, 15 # system call for write to file
-    move $a0, $s1 # file descriptor
-    la $a1, output_buffer # address of buffer from which to write
-    li $a2, 60000 # hardcoded buffer length
+    li $v0, 15 
+    move $a0, $s1 
+    la $a1, output_buffer 
+    li $a2, 60000 
     syscall
 
 
 
     # Close the input file
-    li $v0, 16 # system call for close file
-    move $a0, $s0 # file descriptor to close
+    li $v0, 16 
+    move $a0, $s0 
     syscall
 
     # Close the output file
-    li $v0, 16 # system call for close file
-    move $a0, $s1 # file descriptor to close
+    li $v0, 16 
+    move $a0, $s1 
     syscall
 
     # exit
-    li $v0, 10 # system call for exit
-    syscall # exit
+    li $v0, 10 
+    syscall 
