@@ -83,10 +83,10 @@
 
 #### Data Segment ###################################################################################################################################################
 .data
-    filename_in: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Input\house_64_in_ascii_crlf.ppm"
-    filename_out: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Output\House.ppm"
-    input_buffer: .space 60000 #Whole size of input file
-    output_buffer: .space 60000 #Whole size of output file
+    filename_in: .asciiz "C:\Users\User\Downloads\sample_images\house_64_in_ascii_crlf.ppm"
+    filename_out: .asciiz "C:\Users\User\Downloads\sample_images\house.ppm"
+    input_buffer: .space 70000 #Whole size of input file
+    output_buffer: .space 70000 #Whole size of output file
     reverse_buffer: .space 12 #size of string
     average_original_prompt: .asciiz "The average of all RGB values of the original file is: \n" # prompt for average_original
     average_new_prompt: .asciiz "\nThe average of all RGB values of the new file is: \n" # prompt for average_new

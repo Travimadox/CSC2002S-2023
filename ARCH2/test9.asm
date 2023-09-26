@@ -10,7 +10,7 @@ main:
     sw $ra, 0($sp)
 
     # Initialize integer in $a0
-    li $a0, 123
+    li $a0, 206
 
     # Load the address of output_buffer into $a1
     la $a1, output_buffer
@@ -33,9 +33,10 @@ main:
 
 # Your int2str function goes here
 int2str:
-    # Initialize loop counter and buffer index
+    # Initialize loop counter, buffer index and zero counter
     li $t8, 0
     li $t6, 10
+    li $t5, 0  # Counter for trailing zeros
 
     # Reverse the integer to convert from least significant digit to most
     li $t7, 0
@@ -46,11 +47,18 @@ int2str:
         mul $t7, $t7, $t6
         add $t7, $t7, $t9
         divu $a0, $a0, $t6
+
+        # Check for zeros
+        beq $t9, $zero, int2str_check_zero
+        j int2str_reverse_loop
+
+    int2str_check_zero:
+        addi $t5, $t5, 1  # Increment zero counter
         j int2str_reverse_loop
 
     # Convert reversed integer to ASCII character
     int2str_conversion_loop:
-        beq $t7, $zero, int2str_end
+        beq $t7, $zero, int2str_append_zeroes
         div $t7, $t6
         mfhi $t9
         addiu $t9, $t9, 48
@@ -59,12 +67,22 @@ int2str:
         divu $t7, $t7, $t6
         j int2str_conversion_loop
 
+    int2str_append_zeroes:
+        beq $t5, $zero, int2str_end
+        li $t9, 48  # ASCII for '0'
+        sb $t9, 0($a1)
+        addi $a1, $a1, 1
+        addi $t5, $t5, -1
+        j int2str_append_zeroes
+
     int2str_end:
     # Null-terminate the string
     sb $zero, 0($a1)
 
     # Exit
     jr $ra
+
+    
 
 # Utility function to print a string
 print_string:
