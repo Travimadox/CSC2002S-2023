@@ -59,8 +59,8 @@
 
 #### Data Segment ###############################################################################################################
 .data
-    filename_in: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Input\jet_64_in_ascii_crlf.ppm"
-    filename_out: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Output\Jet_Greyscale.ppm"
+    filename_in: .asciiz "C:\Users\User\Downloads\sample_images\house_64_in_ascii_crlf.ppm"
+    filename_out: .asciiz "C:\Users\User\Downloads\sample_images\house_64_outgreyscale_ascii_cr.ppm"
     input_buffer: .space 60000 #Whole size of input file
     output_buffer: .space 60000 #Whole size of output file
     reverse_buffer: .space 12 #size of string
@@ -272,40 +272,38 @@ loop:
         li $t2, 3
         div $s2, $s2, $t2
 
-    # Convert the integer to a string
-    # Initialize loop counter and buffer index
-    li $t6, 10
-    li $t8, 0  # Counter for total number of digits
+        #Convert to ASCII
+        # Initialize loop counter and buffer index
+        li $t8, 0
+        li $t6, 10
 
-    # Reverse the integer to convert from least significant digit to most
-    li $t7, 0
+         # Reverse the integer to convert from least significant digit to most
+        li $t7, 0
 
-    int2str_reverse_loop:
+        int2str_reverse_loop:
         beq $s2, $zero, int2str_conversion_loop
         div $s2, $t6
         mfhi $t9
         mul $t7, $t7, $t6
         add $t7, $t7, $t9
         divu $s2, $s2, $t6
-        addi $t8, $t8, 1  # Count the digit
         j int2str_reverse_loop
 
-    # Convert reversed integer to ASCII character
-    int2str_conversion_loop:
-        beq $t8, $zero, int2str_end
+        # Convert reversed integer to ASCII character
+        int2str_conversion_loop:
+        beq $t7, $zero, int2str_end
         div $t7, $t6
         mfhi $t9
         addiu $t9, $t9, 48
         sb $t9, 0($t1)
         addi $t1, $t1, 1
         divu $t7, $t7, $t6
-        addi $t8, $t8, -1  # Decrement digit counter
         j int2str_conversion_loop
 
-    int2str_end:
-    # Null-terminate the string
-    li $t9, 10
-    sb $t9, 0($t1)
+        int2str_end:
+        # Null-terminate the string
+        li $t9, 10
+        sb $t9, 0($t1)
 
 
     # decrement the counter
