@@ -1,6 +1,8 @@
 
 # How to Run and Execute MIPS Assembly Codes for Image Processing
 
+The git repository can be found at: [ARCH2](https://github.com/Travimadox/CSC2002S-2023/tree/main/ARCH2)
+
 ## Requirements
 
 - **QtSPIM Simulator**: It's recommended to use QtSPIM as the code has been tested on this platform. Other SPIM simulators may work but have not been tested.
