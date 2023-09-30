@@ -67,9 +67,7 @@ Change these lines to match the paths to your input and output files.
 
 ### Hardcoding of Input and Output Files
 
-Currently, the file paths for input and output are hardcoded into the assembly files. This could be made more user-friendly by:
+Currently, the file paths for input and output are hardcoded into the assembly files. This could be made more user-friendly but time constraints did not allow for that to be implemented in due time.
 
-- Providing a GUI interface for selecting input and output files.
-- Allowing command-line arguments for file paths.
 
 By following these steps, you should be able to run and evaluate the MIPS Assembly codes for image processing.

@@ -1,8 +1,8 @@
 ################### Main Program Header ################################################################################################################################
 # Program 1 : increase_brightness.asm 
 # Programmer : Travimadox Webb
-# Due Date : 29th September, 2023 Course: CSC2002S
-# Last Modified : 25th September, 2023
+# Due Date : 30th September, 2023 Course: CSC2002S
+# Last Modified : 30th September, 2023
 ####################################################################################################################################################################
 # Overall Program Functional Description :
 # This program reads in a PPM file and increases the each RGB value by 10

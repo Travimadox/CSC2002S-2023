@@ -2,7 +2,7 @@
 # Program 2 : greyscale.asm 
 # Programmer : Travimadox Webb
 # Due Date : 29th September, 2023 Course: CSC2002S
-# Last Modified : 25th September, 2023
+# Last Modified : 30th September, 2023
 ####################################################################################################################################################################
 # Overall Program Description:
 # This program takes in a ppm file and converts it to a greyscale image.
@@ -59,8 +59,8 @@
 
 #### Data Segment ###############################################################################################################
 .data
-    filename_in: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Input\jet_64_in_ascii_crlf.ppm"
-    filename_out: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Output\Jet_Greyscale.ppm"
+    filename_in: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Input\house_64_in_ascii_crlf.ppm"
+    filename_out: .asciiz "C:\Users\User\OneDrive - University of Cape Town\Desktop\CSC2002S\CSC2002S-2023\ARCH2\Images\Output\House_Greyscale.ppm"
     input_buffer: .space 60000 #Whole size of input file
     output_buffer: .space 60000 #Whole size of output file
     reverse_buffer: .space 12 #size of string
